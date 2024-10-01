@@ -227,9 +227,7 @@ function toggleSidebar(show) {
   localStorage.setItem('showSideBar', 'false')
   elements.showSideBarBtn.style.display = 'block'
 }
-  // elements.sideBarDiv.classList.remove('show-side-bar-btn')
-  // elements.sideBarDiv.classList.add('hide-side-bar-btn')
-  
+
  
 }
 
@@ -237,9 +235,11 @@ function toggleTheme() {
  if(elements.themeSwitch.checked){
   document.body.classList.add('light-theme')
   localStorage.setItem('light-theme', 'enabled')
+  document.getElementById('side-logo-div').innerHTML = `<img id="logo" src="./assets/logo-light.svg" alt="light-theme">`
  } else{
   document.body.classList.remove('light-theme')
-  localStorage.setItem('light-theme', 'disabled')
+  localStorage.setItem('light-theme', 'disabled') 
+  document.getElementById('side-logo-div').innerHTML = `<img id="logo" src="./assets/logo-dark.svg" alt="dark-theme">`
  }
 }
 
@@ -285,13 +285,18 @@ document.addEventListener('DOMContentLoaded', function() {
 function init() {
   initializeData()
   setupEventListeners();
-
+//checking the sidebar
   const showSidebar = localStorage.getItem('showSideBar') === 'true';
   toggleSidebar(showSidebar);
-
+//checking the theme
   const isLightTheme = localStorage.getItem('light-theme') === 'enabled';
   elements.themeSwitch.checked = isLightTheme;
   document.body.classList.toggle('light-theme', isLightTheme);
+  //checking the logo
+  const logoDiv = document.getElementById('side-logo-div');
+  const logoSrc = isLightTheme ? './assets/logo-light.svg' : './assets/logo-dark.svg';
+  const logoAlt = isLightTheme ? 'light-theme' : 'dark-theme';
+  logoDiv.innerHTML = `<img id="logo" src="${logoSrc}" alt="${logoAlt}">`;
 
   fetchAndDisplayBoardsAndTasks(); // Initial display of boards and tasks
   
