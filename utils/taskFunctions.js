@@ -27,8 +27,8 @@ export const patchTask = (id, updates) => {
       tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
       saveTasks(tasks);
       // Previously: location.reload(); Now: We'll refresh the UI instead.
-  }
-  return tasks; // Optionally return the updated tasks list for further processing
+    } 
+    return tasks; // Optionally return the updated tasks list for further processing
 };
 
 export const putTask = (id, updatedTask) => {
@@ -47,4 +47,5 @@ export const deleteTask = (id) => {
   saveTasks(updatedTasks);
   // Previously: location.reload(); Now: We'll refresh the UI instead.
   return updatedTasks; // Optionally return the updated tasks list for further processing
+
 };
