@@ -84,9 +84,9 @@ function filterAndDisplayTasksByBoard(boardName) {
   // Ensure the column titles are set outside of this function or correctly initialized before this function runs
 
   elements.columnDivs.forEach(column => {
-    const status = column.getAttribute("data-status");
+    const status = column.getAttribute('data-status');
     // Reset column content while preserving the column title
-    column.innerHTML = `<div class="column-head-div">
+    column.innerHTML = `<div class="column-head-div" id="${status}-head-div">
                           <span class="dot" id="${status}-dot"></span>
                           <h4 class="columnHeader">${status.toUpperCase()}</h4>
                         </div>`;
@@ -97,6 +97,7 @@ function filterAndDisplayTasksByBoard(boardName) {
     filteredTasks.filter(task => task.status === status).forEach(task => { 
       const taskElement = document.createElement("div");
       taskElement.classList.add("task-div");
+
       taskElement.textContent = task.title;
       taskElement.setAttribute('data-task-id', task.id);
 
@@ -112,7 +113,6 @@ function filterAndDisplayTasksByBoard(boardName) {
 
 
 function refreshTasksUI() {
-  console.log(getTasks())
   filterAndDisplayTasksByBoard(activeBoard);
 }
 
@@ -138,20 +138,25 @@ function addTaskToUI(task) {
     return;
   }
 
-  let tasksContainer = column.querySelector('.tasks-container');
+  let tasksContainer = column.querySelector('.tasks-container')
+  
   if (!tasksContainer) {
     console.warn(`Tasks container not found for status: ${task.status}, creating one.`);
     tasksContainer = document.createElement('div');
-    tasksContainer.className = 'tasks-container';
-    column.appendChild(tasksContainer);
+    tasksContainer.classList.add('tasks-container');
+    column.appendChild(tasksContainer)
   }
+  
 
   const taskElement = document.createElement('div');
-  taskElement.className = 'task-div';
+  taskElement.classList.add('task-div');
   taskElement.textContent = task.title; // Modify as needed
   taskElement.setAttribute('data-task-id', task.id);
-  
+ 
   tasksContainer.appendChild(taskElement); 
+  taskElement.addEventListener("click",() => { 
+    openEditTaskModal(task)});
+
 }
 
 
@@ -210,15 +215,16 @@ function addTask(event) {
     const task = {
       title: document.getElementById('title-input').value,
       description: document.getElementById('desc-input').value,
-      status: document.getElementById('select-input').value
+      status: document.getElementById('select-status').value,
+       board: elements.headerBoardName.textContent,
     };
+    
     const newTask = createNewTask(task);
     if (newTask) {
       addTaskToUI(newTask);
       toggleModal(false);
       elements.filterDiv.style.display = 'none'; // Also hide the filter overlay
       event.target.reset();
-      refreshTasksUI();
     }
 }
 
