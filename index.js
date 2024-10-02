@@ -218,6 +218,10 @@ function addTask(event) {
       status: document.getElementById('select-status').value,
        board: elements.headerBoardName.textContent,
     };
+    if(!task.title){
+      alert('You need to give your task a name!')
+      return;
+    }
     
     const newTask = createNewTask(task);
     if (newTask) {
